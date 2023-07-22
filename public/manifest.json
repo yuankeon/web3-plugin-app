@@ -1,0 +1,58 @@
+{
+  "name": "Jack-Extension",
+  "description": "测试Chrome插件",
+  "version": "1.0",
+  "manifest_version": 3,
+  "icons": {
+    "16": "cat.png",
+    "48": "cat.png",
+    "128": "cat.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "action": {
+    "default_title": "Click to view a popup",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "tabs",
+    "bookmarks",
+    "storage",
+    "history",
+    "notifications",
+    "commands",
+    "activeTab",
+    "scripting",
+    "contextMenus",
+    "browsingData"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "web_accessible_resources": [
+    {
+      "matches": [
+        "\u003Call_urls>"
+      ],
+      "resources": [
+        "assets/*"
+      ]
+    }
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content-script.js"
+      ],
+      "run_at": "document_end"
+    }
+  ]
+}
