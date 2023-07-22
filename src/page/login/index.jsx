@@ -1,21 +1,32 @@
 import { Card, Input, Form, Button, message } from 'antd';
 import { CryptoUtils } from '../../utils/crypto'
+import { useState } from 'react';
+import { getEmailNonce } from '../../api/login'
 
 export function Login() {
   const [messageApi, contextHolder] = message.useMessage();
+  const [loading, setLoading] = useState(false)
 
   const onFinishFailed = () => {
     messageApi.error('please input your info')
   }
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
+    setLoading(true)
     const cryptoPassword = CryptoUtils.hmac256(values.password, 'DEFED')
     const params = {
       email: values.email,
       password: cryptoPassword,
       verifyCode: values.code,
     }
-    console.log(params);
+    try {
+      const result = await getEmailNonce(params)
+      console.log(result)
+    } catch (error) {
+      messageApi.error(error.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -54,7 +65,7 @@ export function Login() {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={loading}>
               Submit
             </Button>
           </Form.Item>
