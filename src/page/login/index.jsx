@@ -36,7 +36,14 @@ export function Login() {
     }
     try {
       const result = await getEmailNonce(params)
-      console.log(result)
+      if (result.code === 200) {
+        const { nonce, privateKey } = result.data
+        //解密私钥
+        // const originPrivateKey = CryptoUtils.decrypt(privateKey, values.password)
+        // console.log(originPrivateKey)
+      } else {
+        throw Error(result.msg)
+      }
     } catch (error) {
       messageApi.error(error.message)
     } finally {
