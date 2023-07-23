@@ -1,14 +1,29 @@
-import { Card, Input, Form, Button, message } from 'antd';
+import { Card, Input, Form, Button, message, Statistic } from 'antd';
 import { CryptoUtils } from '../../utils/crypto'
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { getEmailNonce } from '../../api/login'
+import { useEmailCode } from '../../hooks/useEmailCode'
+
+const { Countdown } = Statistic;
 
 export function Login() {
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState(false)
+  const emailRef = useRef(null)
+
+  const { canCode, resendCode, handleCode, prefixStr } = useEmailCode()
 
   const onFinishFailed = () => {
     messageApi.error('please input your info')
+  }
+
+  const sendCode = () => {
+    const eamil = emailRef.current?.input?.value
+    if (!eamil) {
+      messageApi.error('please input your info')
+      return
+    }
+    handleCode(eamil).catch((error) => messageApi.error(error.message))
   }
 
   const onFinish = async (values) => {
@@ -45,7 +60,7 @@ export function Login() {
             name="email"
             rules={[{ required: true, message: 'Please input your email!' }]}
           >
-            <Input />
+            <Input style={{ height: 42 }} ref={emailRef} />
           </Form.Item>
 
           <Form.Item
@@ -53,7 +68,7 @@ export function Login() {
             name="password"
             rules={[{ required: true, message: 'Please input your password!' }]}
           >
-            <Input.Password />
+            <Input.Password style={{ height: 42 }} />
           </Form.Item>
 
           <Form.Item
@@ -61,7 +76,26 @@ export function Login() {
             name="code"
             rules={[{ required: true, message: 'Please input your code!' }]}
           >
-            <Input />
+            <Input
+              style={{ height: 42 }}
+              prefix={prefixStr ? `${prefixStr}-` : null}
+              suffix={(
+                canCode ? (
+                  <Button
+                    type='link'
+                    style={{ padding: 0 }}
+                    onClick={sendCode}
+                  >
+                    Get code
+                  </Button>
+                ) : (
+                  <Countdown
+                    format='ss'
+                    value={Date.now() + 60 * 1000}
+                    onFinish={resendCode}
+                  />
+                )
+              )} />
           </Form.Item>
 
           <Form.Item>

@@ -14,6 +14,11 @@ body {
   justify-content: center;
 }
 
+.ant-statistic .ant-statistic-content {
+  font-size: 14px;
+  color: #4096ff;
+}
+
 .background-radial-gradient {
   position: fixed;
   top: 0;

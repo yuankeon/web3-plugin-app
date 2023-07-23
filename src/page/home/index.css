@@ -1,0 +1,50 @@
+.home {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  .header {
+    height: 60px;
+    padding: 0 16px;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+  }
+
+  .loading {
+    height: 420px;
+  }
+
+  .content {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+  }
+
+  .title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .token-item {
+    display: flex;
+    align-items: center;
+    height: 60px;
+  }
+
+  .token-item div {
+    display: flex;
+    align-items: center;
+  }
+
+  .token-item img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .group {
+    justify-content: space-between;
+  }
+}
