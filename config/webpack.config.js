@@ -301,7 +301,11 @@ module.exports = function (webpackEnv) {
         "crypto": require.resolve('crypto-browserify'),
         "buffer": require.resolve("buffer/"),
         "assert": require.resolve("assert/"),
-        "stream": require.resolve("stream-browserify")
+        "stream": require.resolve("stream-browserify"),
+        "http": require.resolve("stream-http"),
+        "https": require.resolve("https-browserify"),
+        "url": require.resolve("url/"),
+        "os": require.resolve("os-browserify/browser")
       },
       modules: ['node_modules', paths.appNodeModules].concat(
         modules.additionalModulePaths || []

@@ -4,7 +4,7 @@ import { WalletUtils } from '../../utils/wallet'
 import { useRef, useState } from 'react';
 import { getEmailNonce, getTokenAPI, getAccountDataAPI } from '../../api/login'
 import { useEmailCode } from '../../hooks/useEmailCode'
-import { Web3 } from 'web3';
+import Web3 from 'web3';
 import { useNavigate } from 'react-router-dom'
 import { useUserStore } from '../../store/userStore'
 
