@@ -2,6 +2,7 @@ import { Button, Card, Spin } from "antd";
 import { useDataStore } from '../../store/dataStore'
 import { useNavigate } from 'react-router-dom'
 import { useUserStore } from '../../store/userStore'
+import { shortAddress } from '../../utils'
 
 import './index.css'
 
@@ -37,8 +38,8 @@ export function Home() {
     <div className="home">
       <div className="header">
         {userData ? (
-          <div>
-            {userData.proxyAddress}
+          <div className="account">
+            {shortAddress(userData.proxyAddress)}
           </div>
         ) : (
           <Button type='primary' onClick={() => navigate('/login')}>Login</Button>
