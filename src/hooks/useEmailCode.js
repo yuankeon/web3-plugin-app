@@ -8,12 +8,8 @@ export function useEmailCode() {
   const handleCode = async (email) => {
     setCanCode(false)
     const fetchData = await getSendVerifyCode({ email, token: '' })
-    if (fetchData.code === 200) {
-      //设置验证码的前缀
-      setPrefixStr(fetchData.data)
-    } else {
-      throw Error(fetchData.msg)
-    }
+    //设置验证码的前缀
+    setPrefixStr(fetchData)
   }
 
   const resendCode = () => {

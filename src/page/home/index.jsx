@@ -1,6 +1,8 @@
 import { Button, Card, Spin } from "antd";
 import { useDataStore } from '../../store/dataStore'
 import { useNavigate } from 'react-router-dom'
+import { useUserStore } from '../../store/userStore'
+
 import './index.css'
 
 const header = [
@@ -29,11 +31,14 @@ const header = [
 export function Home() {
   const navigate = useNavigate()
   const systemData = useDataStore((state) => state.systemData)
+  const userData = useUserStore((state) => state.userData)
 
   return (
     <div className="home">
       <div className="header">
-        <Button type='primary' onClick={() => navigate('/login')}>Login</Button>
+        {userData ? '++++' : (
+          <Button type='primary' onClick={() => navigate('/login')}>Login</Button>
+        )}
       </div>
 
       <div className="content">

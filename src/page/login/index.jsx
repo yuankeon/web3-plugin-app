@@ -1,8 +1,12 @@
 import { Card, Input, Form, Button, message, Statistic } from 'antd';
 import { CryptoUtils } from '../../utils/crypto'
+import { WalletUtils } from '../../utils/wallet'
 import { useRef, useState } from 'react';
-import { getEmailNonce } from '../../api/login'
+import { getEmailNonce, getTokenAPI, getAccountDataAPI } from '../../api/login'
 import { useEmailCode } from '../../hooks/useEmailCode'
+import { Web3 } from 'web3';
+import { useNavigate } from 'react-router-dom'
+import { useUserStore } from '../../store/userStore'
 
 const { Countdown } = Statistic;
 
@@ -12,6 +16,8 @@ export function Login() {
   const emailRef = useRef(null)
 
   const { canCode, resendCode, handleCode, prefixStr } = useEmailCode()
+  const setUserData = useUserStore((state) => state.setUserData)
+  const navigate = useNavigate()
 
   const onFinishFailed = () => {
     messageApi.error('please input your info')
@@ -36,14 +42,18 @@ export function Login() {
     }
     try {
       const result = await getEmailNonce(params)
-      if (result.code === 200) {
-        const { nonce, privateKey } = result.data
-        //解密私钥
-        // const originPrivateKey = CryptoUtils.decrypt(privateKey, values.password)
-        // console.log(originPrivateKey)
-      } else {
-        throw Error(result.msg)
-      }
+      const { nonce, privateKey } = result
+      //解密私钥
+      const originPrivateKey = CryptoUtils.decrypt(privateKey, values.password)
+      const { address } = WalletUtils.getWallet(originPrivateKey)
+      const text = `Sign in with DEFED Distributed Digital Identity. Nonce:${nonce}`
+      const { signature } = new Web3().eth.accounts.sign(text, originPrivateKey)
+      const res = await getTokenAPI({ signature, address })
+      //请求token之后获取用户信息，缓存token
+      localStorage.setItem('token', res.token)
+      const userData = await getAccountDataAPI()
+      setUserData(userData)
+      navigate('/', { replace: true })
     } catch (error) {
       messageApi.error(error.message)
     } finally {

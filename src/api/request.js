@@ -23,9 +23,9 @@ request.interceptors.request.use((config) => {
 request.interceptors.response.use(
   (response) => {
     //成功回调 => 简化数据
-    if (response.data.code === 200) return response.data
+    if (response.data.code === 200) return response.data.data
     //【抛出需要客户端处理的错误】
-    throw new Error(response.data.msg)
+    throw Error(response.data.msg)
   },
   (error) => {
     //失败回调:处理http网络错误【处理服务器端的错误】
