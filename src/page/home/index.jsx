@@ -36,7 +36,11 @@ export function Home() {
   return (
     <div className="home">
       <div className="header">
-        {userData ? '++++' : (
+        {userData ? (
+          <div>
+            {userData.proxyAddress}
+          </div>
+        ) : (
           <Button type='primary' onClick={() => navigate('/login')}>Login</Button>
         )}
       </div>
@@ -73,7 +77,7 @@ export function Home() {
                 <span>{item.variableBorrows}</span>
               </div>
               <div className="group" style={{ width: header[4].width }}>
-                <Button type="primary">Deposit</Button>
+                <Button type="primary" disabled={item.chainName === 'Ethereum'}>Deposit</Button>
                 <Button type="primary">Withdraw</Button>
                 <Button type="primary">Transfer</Button>
                 <Button type="primary">Borrow</Button>
