@@ -1,14 +1,14 @@
 import { Card, Input, Form, Button, message, Statistic } from 'antd';
-import { CryptoUtils } from '../../utils/crypto'
-import { WalletUtils } from '../../utils/wallet'
+import { CryptoUtils } from 'src/utils/crypto';
+import { WalletUtils } from 'src/utils/wallet'
 import { useRef, useState } from 'react';
-import { getEmailNonce, getTokenAPI, getAccountDataAPI } from '../../api/login'
-import { getSystemData } from "../../api/rpc";
-import { useEmailCode } from '../../hooks/useEmailCode'
+import { getEmailNonce, getTokenAPI, getAccountDataAPI } from 'src/api/login'
+import { getSystemData } from "src/api/rpc";
+import { useEmailCode } from 'src/hooks/useEmailCode'
 import Web3 from 'web3';
 import { useNavigate } from 'react-router-dom'
-import { useUserStore } from '../../store/userStore'
-import { useDataStore } from '../../store/dataStore'
+import { useUserStore } from 'src/store/userStore'
+import { useDataStore } from 'src/store/dataStore'
 
 const { Countdown } = Statistic;
 

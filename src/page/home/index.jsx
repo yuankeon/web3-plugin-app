@@ -1,8 +1,8 @@
 import { Button, Card, Spin } from "antd";
-import { useDataStore } from '../../store/dataStore'
+import { useDataStore } from 'src/store/dataStore'
 import { useNavigate } from 'react-router-dom'
-import { useUserStore } from '../../store/userStore'
-import { shortAddress } from '../../utils'
+import { useUserStore } from 'src/store/userStore'
+import { shortAddress } from 'src/utils'
 
 import './index.css'
 

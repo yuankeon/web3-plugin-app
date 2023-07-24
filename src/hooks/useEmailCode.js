@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getSendVerifyCode } from '../api/login'
+import { getSendVerifyCode } from 'src/api/login'
 
 export function useEmailCode() {
   const [canCode, setCanCode] = useState(true)

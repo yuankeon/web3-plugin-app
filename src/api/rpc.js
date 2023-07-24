@@ -1,8 +1,8 @@
 import Web3 from 'web3'
-import { L2_RPC_URL, DATAPROVIDER_ADDRESS } from '../config'
-import DataProviderABI from '../json/DataProviderV2.json'
+import { L2_RPC_URL, DATAPROVIDER_ADDRESS } from 'src/config'
+import DataProviderABI from 'src/json/DataProviderV2.json'
 import { BigNumber } from 'bignumber.js'
-import { removeDecimals } from '../utils/math'
+import { removeDecimals } from 'src/utils/math'
 
 const TokenSymbols = [
   'ETH',

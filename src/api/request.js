@@ -2,7 +2,7 @@
  * axios的二次封装：使用请求拦截器与响应拦截器
  */
 import axios from 'axios'
-import { API_URL } from '../config'
+import { API_URL } from 'src/config'
 
 const request = axios.create({
   baseURL: API_URL,
