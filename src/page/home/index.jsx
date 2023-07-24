@@ -1,41 +1,38 @@
-import { Button, Card, Spin } from "antd";
+import { Button, Card, Spin, message } from "antd";
 import { useDataStore } from 'src/store/dataStore'
 import { useNavigate } from 'react-router-dom'
 import { useUserStore } from 'src/store/userStore'
-import { shortAddress } from 'src/utils'
-
+import { shortAddress, header } from 'src/utils'
 import './index.css'
 
-const header = [
-  {
-    name: 'Asset',
-    width: '15%'
-  },
-  {
-    name: 'My Balance',
-    width: '15%',
-  },
-  {
-    name: 'My Credit',
-    width: '15%',
-  },
-  {
-    name: 'My Debt',
-    width: '15%',
-  },
-  {
-    name: 'Operation',
-    width: '40%',
-  }
-]
-
 export function Home() {
+  const [messageApi, contextHolder] = message.useMessage();
+
   const navigate = useNavigate()
   const systemData = useDataStore((state) => state.systemData)
   const userData = useUserStore((state) => state.userData)
 
+  const checkLogin = () => {
+    if (!userData) {
+      messageApi.error('Please login first')
+      return false
+    }
+    return true
+  }
+
+  /**
+   * 
+   * @param {string} act 
+   * @returns
+   */
+  const action = (act) => {
+    if (!checkLogin()) return
+    console.log('666', act)
+  }
+
   return (
     <div className="home">
+      {contextHolder}
       <div className="header">
         {userData ? (
           <div className="account">
@@ -78,18 +75,22 @@ export function Home() {
                 <span>{item.variableBorrows}</span>
               </div>
               <div className="group" style={{ width: header[4].width }}>
-                <Button type="primary" disabled={item.chainName === 'Ethereum'}>Deposit</Button>
-                <Button type="primary">Withdraw</Button>
-                <Button type="primary">Transfer</Button>
-                <Button type="primary">Borrow</Button>
-                <Button type="primary">Repay</Button>
+                <Button
+                  type="primary"
+                  disabled={item.chainName === 'Ethereum'}
+                  onClick={() => action('Deposit')}
+                >
+                  Deposit
+                </Button>
+                <Button type="primary" onClick={() => action('Withdraw')}>Withdraw</Button>
+                <Button type="primary" onClick={() => action('Transfer')}>Transfer</Button>
+                <Button type="primary" onClick={() => action('Borrow')}>Borrow</Button>
+                <Button type="primary" onClick={() => action('Repay')}>Repay</Button>
               </div>
             </div>
           ))}
         </Card>
       </div>
-
-
     </div>
   )
 }
