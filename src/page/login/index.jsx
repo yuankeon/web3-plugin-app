@@ -3,10 +3,12 @@ import { CryptoUtils } from '../../utils/crypto'
 import { WalletUtils } from '../../utils/wallet'
 import { useRef, useState } from 'react';
 import { getEmailNonce, getTokenAPI, getAccountDataAPI } from '../../api/login'
+import { getSystemData } from "../../api/rpc";
 import { useEmailCode } from '../../hooks/useEmailCode'
 import Web3 from 'web3';
 import { useNavigate } from 'react-router-dom'
 import { useUserStore } from '../../store/userStore'
+import { useDataStore } from '../../store/dataStore'
 
 const { Countdown } = Statistic;
 
@@ -17,6 +19,7 @@ export function Login() {
 
   const { canCode, resendCode, handleCode, prefixStr } = useEmailCode()
   const setUserData = useUserStore((state) => state.setUserData)
+  const setSystemData = useDataStore((state) => state.setSystemData)
   const navigate = useNavigate()
 
   const onFinishFailed = () => {
@@ -52,7 +55,10 @@ export function Login() {
       //请求token之后获取用户信息，缓存token
       localStorage.setItem('token', res.token)
       const userData = await getAccountDataAPI()
+      //获取用户的资产数据
+      const assetData = await getSystemData(userData.proxyAddress)
       setUserData(userData)
+      setSystemData(assetData)
       navigate('/', { replace: true })
     } catch (error) {
       messageApi.error(error.message)
