@@ -41,6 +41,8 @@ function Withdraw({ tokenData, handleCancel }) {
     const { decimals, vtoken } = tokenData
     userWithdraw({ privateKey, decimals, amountInput, vtoken, receiver }).then(() => {
       message.success('Withdraw success!')
+      setAmountInput('')
+      setReceiver('')
       handleCancel()
     }).catch((error) => {
       message.error(error.message)
