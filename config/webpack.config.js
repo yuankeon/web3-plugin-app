@@ -305,7 +305,8 @@ module.exports = function (webpackEnv) {
         "http": require.resolve("stream-http"),
         "https": require.resolve("https-browserify"),
         "url": require.resolve("url/"),
-        "os": require.resolve("os-browserify/browser")
+        "os": require.resolve("os-browserify/browser"),
+        "zlib": require.resolve("browserify-zlib")
       },
       modules: ['node_modules', paths.appNodeModules].concat(
         modules.additionalModulePaths || []

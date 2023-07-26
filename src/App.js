@@ -8,6 +8,7 @@ import { useUserStore } from './store/userStore'
 import { useEffect } from "react";
 import { message } from 'antd'
 import { getAccountDataAPI } from './api/login'
+import { PasswordModal } from 'src/components/PasswordModal'
 
 function App() {
   const [messageApi, contextHolder] = message.useMessage()
@@ -40,11 +41,13 @@ function App() {
     } else {
       initData(undefined)
     }
+    // eslint-disable-next-line
   }, [])
 
   return (
     <>
       {contextHolder}
+      <PasswordModal />
       <div className="background-radial-gradient"></div>
       <Routes>
         <Route path='/login' element={<Login />} />

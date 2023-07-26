@@ -18,6 +18,7 @@ export function Home() {
 
   const [showTxModal, setShowTxModal] = useState(false)
   const [actionTx, setActionTx] = useState('')
+  const [selectToken, setSelectToken] = useState()
 
   const checkLogin = () => {
     if (!userData) {
@@ -27,14 +28,17 @@ export function Home() {
     return true
   }
 
-  const action = (act) => {
+  const action = (act, tokenData) => {
     if (!checkLogin()) return
     setShowTxModal(true)
     setActionTx(act)
+    setSelectToken(tokenData)
   }
 
   const handleCancel = () => {
     setShowTxModal(false)
+    setActionTx('')
+    setSelectToken(undefined)
   }
 
   return (
@@ -89,7 +93,7 @@ export function Home() {
                 >
                   Deposit
                 </Button>
-                <Button type="primary" onClick={() => action('Withdraw')}>Withdraw</Button>
+                <Button type="primary" onClick={() => action('Withdraw', item)}>Withdraw</Button>
                 <Button type="primary" onClick={() => action('Transfer')}>Transfer</Button>
                 {item.chainName === 'Ethereum' ? (
                   <>
@@ -112,6 +116,7 @@ export function Home() {
         isModalOpen={showTxModal}
         handleCancel={handleCancel}
         actionTx={actionTx}
+        tokenData={selectToken}
       />
     </div>
   )
