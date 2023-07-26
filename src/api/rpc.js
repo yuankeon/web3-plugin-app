@@ -2,7 +2,7 @@ import Web3 from 'web3'
 import { L2_RPC_URL, DATAPROVIDER_ADDRESS } from 'src/config'
 import DataProviderABI from 'src/json/DataProviderV2.json'
 import { BigNumber } from 'bignumber.js'
-import { removeDecimals } from 'src/utils/math'
+import { removeDecimals, computedCreditBalance } from 'src/utils/math'
 
 const TokenSymbols = [
   'ETH',
@@ -37,6 +37,7 @@ export async function getSystemData(proxy = '0x000000000000000000000000000000000
   } = systemData
 
   const data = []
+  const rawCreditETH = systemData.userInfo.availableBorrowsETH
 
   tokensAddress.forEach((item, index) => {
     const symbol = TokenSymbols[index]
@@ -48,8 +49,9 @@ export async function getSystemData(proxy = '0x000000000000000000000000000000000
 
     const ethSavingBalance = removeDecimals(aTokensBalance[index], numberDecimals)
     const polygonSavingBalance = removeDecimals(vTokensBalance[index], numberDecimals)
-    const variableBorrows = removeDecimals(dTokensBalance[index], numberDecimals)
+    const variableBorrows = chainName === 'Ethereum' ? removeDecimals(dTokensBalance[index], numberDecimals) : '--'
     const savingBalance = chainName === 'Ethereum' ? ethSavingBalance : polygonSavingBalance
+    const creditBalance = chainName === 'Ethereum' ? computedCreditBalance(rawCreditETH, tokensPrice[index]) : '--'
 
     if (FILTERTOKENS.includes(name)) return
 
@@ -59,11 +61,12 @@ export async function getSystemData(proxy = '0x000000000000000000000000000000000
       decimals: numberDecimals,
       symbol: symbol,
       chainName,
-      chainId: Number(chainId[index].toString()),
+      chainId: Number(chainId[index]),
       name,
       priceInUsd,
       variableBorrows,
       savingBalance,
+      creditBalance,
     }
     data.push(_data)
   })

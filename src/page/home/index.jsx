@@ -3,6 +3,10 @@ import { useDataStore } from 'src/store/dataStore'
 import { useNavigate } from 'react-router-dom'
 import { useUserStore } from 'src/store/userStore'
 import { shortAddress, header } from 'src/utils'
+import { displayDecimal } from 'src/utils/math'
+import { useState } from "react";
+import { TxModal } from 'src/components/TxModal'
+
 import './index.css'
 
 export function Home() {
@@ -12,6 +16,9 @@ export function Home() {
   const systemData = useDataStore((state) => state.systemData)
   const userData = useUserStore((state) => state.userData)
 
+  const [showTxModal, setShowTxModal] = useState(false)
+  const [actionTx, setActionTx] = useState('')
+
   const checkLogin = () => {
     if (!userData) {
       messageApi.error('Please login first')
@@ -20,14 +27,14 @@ export function Home() {
     return true
   }
 
-  /**
-   * 
-   * @param {string} act 
-   * @returns
-   */
   const action = (act) => {
     if (!checkLogin()) return
-    console.log('666', act)
+    setShowTxModal(true)
+    setActionTx(act)
+  }
+
+  const handleCancel = () => {
+    setShowTxModal(false)
   }
 
   return (
@@ -66,13 +73,13 @@ export function Home() {
                 <span style={{ marginLeft: 4 }}>{item.symbol}</span>
               </div>
               <div style={{ width: header[1].width }}>
-                <span>{item.savingBalance}</span>
+                <span>{displayDecimal(item.savingBalance)}</span>
               </div>
               <div style={{ width: header[2].width }}>
-                <span>{item.savingBalance}</span>
+                <span>{displayDecimal(item.creditBalance)}</span>
               </div>
               <div style={{ width: header[3].width }}>
-                <span>{item.variableBorrows}</span>
+                <span>{displayDecimal(item.variableBorrows)}</span>
               </div>
               <div className="group" style={{ width: header[4].width }}>
                 <Button
@@ -84,13 +91,28 @@ export function Home() {
                 </Button>
                 <Button type="primary" onClick={() => action('Withdraw')}>Withdraw</Button>
                 <Button type="primary" onClick={() => action('Transfer')}>Transfer</Button>
-                <Button type="primary" onClick={() => action('Borrow')}>Borrow</Button>
-                <Button type="primary" onClick={() => action('Repay')}>Repay</Button>
+                {item.chainName === 'Ethereum' ? (
+                  <>
+                    <Button type="primary" onClick={() => action('Borrow')}>Borrow</Button>
+                    <Button type="primary" onClick={() => action('Repay')}>Repay</Button>
+                  </>
+                ) : (
+                  <>
+                    <div style={{ width: 78 }}></div>
+                    <div style={{ width: 72 }}></div>
+                  </>
+                )}
               </div>
             </div>
           ))}
         </Card>
       </div>
+
+      <TxModal
+        isModalOpen={showTxModal}
+        handleCancel={handleCancel}
+        actionTx={actionTx}
+      />
     </div>
   )
 }
